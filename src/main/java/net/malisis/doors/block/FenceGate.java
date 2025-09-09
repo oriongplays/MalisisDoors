@@ -162,11 +162,14 @@ public class FenceGate extends BlockFenceGate implements IComponentProvider, IRe
 		if (world.isRemote)
 			return true;
 
-		FenceGateTileEntity te = TileEntityUtils.getTileEntity(FenceGateTileEntity.class, world, pos);
-		if (te == null)
-			return true;
+                FenceGateTileEntity te = TileEntityUtils.getTileEntity(FenceGateTileEntity.class, world, pos);
+                if (te == null)
+                        return true;
 
-		boolean opened = te.isOpened();
+                if (!te.canPlayerOpen(player))
+                        return true;
+
+                boolean opened = te.isOpened();
 
 		te.openOrCloseDoor();
 		if (opened)

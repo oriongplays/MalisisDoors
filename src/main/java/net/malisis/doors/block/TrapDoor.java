@@ -129,14 +129,17 @@ public class TrapDoor extends BlockTrapDoor implements IBoundingBox, IComponentP
 			return true;
 
 		DoorTileEntity te = Door.getDoor(world, pos);
-		if (te == null)
-			return true;
+                if (te == null)
+                        return true;
 
-		if (te.getDescriptor() == null)
-			return true;
+                if (te.getDescriptor() == null)
+                        return true;
 
-		if (te.getDescriptor().getRedstoneBehavior() == RedstoneBehavior.REDSTONE_ONLY)
-			return true;
+                if (!te.canPlayerOpen(player))
+                        return true;
+
+                if (te.getDescriptor().getRedstoneBehavior() == RedstoneBehavior.REDSTONE_ONLY)
+                        return true;
 
 		//Not possible to set redstone behavior for trapdoors
 		//		if (te.getDescriptor().getRedstoneBehavior() == RedstoneBehavior.REDSTONE_LOCK && te.isPowered())

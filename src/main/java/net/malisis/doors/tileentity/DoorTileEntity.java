@@ -58,6 +58,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import mchorse.mappet.capabilities.character.Character;
 
 /**
  * @author Ordinastie
@@ -80,11 +81,13 @@ public class DoorTileEntity extends TileEntity implements ITickable
 	protected DoorDescriptor descriptor;
 	protected int lastMetadata = -1;
 	protected Timer timer = new Timer(0);
-	protected DoorState state = DoorState.CLOSED;
-	protected boolean moving;
-	protected boolean centered = false;
-	protected PropertyBool openProperty = BlockDoor.OPEN;
-	protected boolean powered = false;
+        protected DoorState state = DoorState.CLOSED;
+        protected boolean moving;
+        protected boolean centered = false;
+        protected PropertyBool openProperty = BlockDoor.OPEN;
+        protected boolean powered = false;
+        protected String factionName = "";
+        protected int factionScore = 0;
 
 	//#region Getter/Setter
 	public DoorDescriptor getDescriptor()
@@ -127,10 +130,37 @@ public class DoorTileEntity extends TileEntity implements ITickable
 		return moving;
 	}
 
-	public void setMoving(boolean moving)
-	{
-		this.moving = moving;
-	}
+        public void setMoving(boolean moving)
+        {
+                this.moving = moving;
+        }
+
+        public void setFaction(String factionName, int factionScore)
+        {
+                this.factionName = factionName;
+                this.factionScore = factionScore;
+        }
+
+        public String getFactionName()
+        {
+                return factionName;
+        }
+
+        public int getFactionScore()
+        {
+                return factionScore;
+        }
+
+        public boolean canPlayerOpen(EntityPlayer player)
+        {
+                if (factionName == null || factionName.isEmpty())
+                        return true;
+                Character character = Character.get(player);
+                if (character == null)
+                        return false;
+                return character.getStates().hasFaction(factionName)
+                                && character.getStates().getFactionScore(factionName) >= factionScore;
+        }
 
 	public IDoorMovement getMovement()
 	{
@@ -462,27 +492,31 @@ public class DoorTileEntity extends TileEntity implements ITickable
 
 	//#region NBT/Network
 	@Override
-	public void readFromNBT(NBTTagCompound nbt)
-	{
-		super.readFromNBT(nbt);
+        public void readFromNBT(NBTTagCompound nbt)
+        {
+                super.readFromNBT(nbt);
 
-		//if (descriptor == null)
-		descriptor = new DoorDescriptor(nbt);
-		setDoorState(DoorState.values()[nbt.getInteger("state")]);
-		setCentered(nbt.getBoolean("centered"));
-	}
+                //if (descriptor == null)
+                descriptor = new DoorDescriptor(nbt);
+                setDoorState(DoorState.values()[nbt.getInteger("state")]);
+                setCentered(nbt.getBoolean("centered"));
+                factionName = nbt.getString("factionName");
+                factionScore = nbt.getInteger("factionScore");
+        }
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
-		if (descriptor != null)
-			descriptor.writeNBT(nbt);
-		nbt.setInteger("state", state.ordinal());
-		nbt.setBoolean("centered", centered);
+                if (descriptor != null)
+                        descriptor.writeNBT(nbt);
+                nbt.setInteger("state", state.ordinal());
+                nbt.setBoolean("centered", centered);
+                nbt.setString("factionName", factionName);
+                nbt.setInteger("factionScore", factionScore);
 
-		return nbt;
-	}
+                return nbt;
+        }
 
 	@Override
 	public NBTTagCompound getUpdateTag()

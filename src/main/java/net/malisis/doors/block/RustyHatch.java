@@ -126,13 +126,16 @@ public class RustyHatch extends MalisisBlock
 		if (world.isRemote)
 			return true;
 
-		RustyHatchTileEntity te = getRustyHatch(world, pos);
-		if (te == null)
-			return true;
+                RustyHatchTileEntity te = getRustyHatch(world, pos);
+                if (te == null)
+                        return true;
 
-		te.openOrCloseDoor();
-		return true;
-	}
+                if (!te.canPlayerOpen(player))
+                        return true;
+
+                te.openOrCloseDoor();
+                return true;
+        }
 
 	@Override
 	public AxisAlignedBB[] getBoundingBoxes(IBlockAccess world, BlockPos pos, IBlockState state, BoundingBoxType type)

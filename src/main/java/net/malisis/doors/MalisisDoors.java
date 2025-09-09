@@ -23,6 +23,7 @@ import net.malisis.doors.block.RustyLadder;
 import net.malisis.doors.block.SaloonDoorBlock;
 import net.malisis.doors.block.TrapDoor;
 import net.malisis.doors.block.VerticalHatchDoor;
+import net.malisis.doors.command.MalisisDoorsCommand;
 import net.malisis.doors.item.CustomDoorItem;
 import net.malisis.doors.item.DoorItem;
 import net.malisis.doors.item.ForcefieldItem;
@@ -36,6 +37,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 @Mod(	modid = MalisisDoors.modid,
 		name = MalisisDoors.modname,
@@ -96,19 +98,25 @@ public class MalisisDoors implements IMalisisMod
 		Registers.init();
 	}
 
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event)
-	{
-		if (MalisisCore.isClient())
-		{
-			new ForcefieldRenderer();
+        @EventHandler
+        public void postInit(FMLPostInitializationEvent event)
+        {
+                if (MalisisCore.isClient())
+                {
+                        new ForcefieldRenderer();
 
 			MalisisRegistry.registerItemRenderer(Items.rustyHandle, RustyHatchRenderer.instance);
 
 			ResourceLocation rl = new ResourceLocation(MalisisDoors.modid + ":fonts/digital-7 (mono).ttf");
-			MalisisDoors.digitalFont = new MalisisFont(rl);
-		}
-	}
+                        MalisisDoors.digitalFont = new MalisisFont(rl);
+                }
+        }
+
+        @EventHandler
+        public void serverStarting(FMLServerStartingEvent event)
+        {
+                event.registerServerCommand(new MalisisDoorsCommand());
+        }
 
 	public static class Blocks
 	{

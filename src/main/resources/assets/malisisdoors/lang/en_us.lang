@@ -95,7 +95,9 @@ tile.curtain_green.name=Green Curtain
 tile.curtain_red.name=Red Curtain
 tile.curtain_black.name=Black Curtain
 
-malisisdoors.command.usage=Use /malisisdoors <command> where command is config or version
+malisisdoors.command.usage=Use /malisisdoors faction <faction> <score>
+malisisdoors.command.faction.set=Set door faction to %s with required score %s
+malisisdoors.command.faction.nodoor=You must look at a Malisis door
 
 config.modifyVanillaDoors=Enable vanilla doors improvement
 config.modifyVanillaDoors.comment=Enables the animations for doors, fence gates and trap doors.\r\nThis replaces the doors entirely so conflicts may arise if another mod tries to modify them too.

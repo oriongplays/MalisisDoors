@@ -97,12 +97,15 @@ public class Door3x3 extends MalisisBlock implements ITileEntityProvider, IChunk
 			return true;
 
 		Door3x3Tile te = TileEntityUtils.getTileEntity(Door3x3Tile.class, world, pos);
-		if (te == null)
-			return true;
+                if (te == null)
+                        return true;
 
-		te.openOrCloseDoor();
-		return true;
-	}
+                if (!te.canPlayerOpen(player))
+                        return true;
+
+                te.openOrCloseDoor();
+                return true;
+        }
 
 	@Override
 	public AxisAlignedBB[] getBoundingBoxes(IBlockAccess world, BlockPos pos, IBlockState state, BoundingBoxType type)

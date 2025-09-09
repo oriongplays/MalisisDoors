@@ -51,7 +51,7 @@ import net.malisis.core.client.gui.component.interaction.UITab;
 import net.malisis.core.client.gui.component.interaction.UITextField;
 import net.malisis.core.client.gui.event.ComponentEvent.ValueChange;
 import net.malisis.core.client.gui.event.component.StateChangeEvent.ActiveStateChange;
-import net.malisis.core.client.gui.render.BackgroundTexture.WindowBackground;
+import net.malisis.core.client.gui.component.container.UIWindow;
 import net.malisis.core.inventory.MalisisInventoryContainer;
 import net.malisis.core.renderer.icon.Icon;
 import net.malisis.core.util.TileEntityUtils;
@@ -101,8 +101,7 @@ public class DoorFactoryGui extends MalisisGui
 	@Override
 	public void construct()
 	{
-		UIContainer<?> window = new UIContainer<>(this, "tile.door_factory.name", UIPlayerInventory.INVENTORY_WIDTH + 80, 255);
-		window.setBackground(new WindowBackground(this));
+		UIWindow window = new UIWindow(this, "tile.door_factory.name", UIPlayerInventory.INVENTORY_WIDTH + 80, 255);
 
 		UIContainer<?> propContainer = getPropertiesContainer();
 		UIContainer<?> matContainer = getMaterialsContainer();

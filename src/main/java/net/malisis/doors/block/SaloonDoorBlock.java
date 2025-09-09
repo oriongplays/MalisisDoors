@@ -69,26 +69,30 @@ public class SaloonDoorBlock extends Door
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
 	{
-		if (!(entity instanceof EntityPlayer))
-			return;
+                if (!(entity instanceof EntityPlayer))
+                        return;
 
-		SaloonDoorTileEntity te = (SaloonDoorTileEntity) getDoor(world, pos);
-		if (te == null)
-			return;
+                EntityPlayer player = (EntityPlayer) entity;
+                SaloonDoorTileEntity te = (SaloonDoorTileEntity) getDoor(world, pos);
+                if (te == null)
+                        return;
 
-		if (te.getDescriptor() == null)
-			return;
+                if (te.getDescriptor() == null)
+                        return;
 
-		if (te.isMoving())
-			return;
+                if (!te.canPlayerOpen(player))
+                        return;
 
-		te.setOpenDirection(entity);
+                if (te.isMoving())
+                        return;
 
-		if (world.isRemote)
-			return;
+                te.setOpenDirection(entity);
 
-		te.openOrCloseDoor();
-	}
+                if (world.isRemote)
+                        return;
+
+                te.openOrCloseDoor();
+        }
 
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state)

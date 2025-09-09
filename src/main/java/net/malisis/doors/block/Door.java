@@ -175,8 +175,11 @@ public class Door extends BlockDoor implements IBoundingBox, IComponentProvider,
 			return true;
 		}
 
-		if (world.isRemote)
-			return true;
+                if (world.isRemote)
+                        return true;
+
+                if (!te.canPlayerOpen(player))
+                        return true;
 
 		if (te.getDescriptor().getRedstoneBehavior() == RedstoneBehavior.REDSTONE_ONLY)
 			return true;
